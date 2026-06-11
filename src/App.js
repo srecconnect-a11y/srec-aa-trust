@@ -140,8 +140,7 @@ export default function App() {
       {/* ── Header ── */}
       <header style={styles.header}>
         <div style={styles.headerInner}>
-          <h1 style={styles.title}>SREC Alumni Association</h1>
-          <h1 style={styles.title}>Charitable Trust</h1>
+          <h1 style={styles.title}>SREC Alumni Association Charitable Trust</h1>
           <p style={styles.subtitle}>Every rupee plants a future. Every donor shapes a legacy.</p>
           {usingDemo && (
             <div style={styles.demoBanner}>
