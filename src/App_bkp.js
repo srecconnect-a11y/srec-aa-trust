@@ -11,8 +11,8 @@ const FREQUENCY_MAP = {
 
 function parseAmount(raw) {
   if (!raw) return 0;
-  const digits = String(raw).replace(/[^\d]/g, "");
-  return parseInt(digits, 10) || 0;
+  const digits = String(raw).replace(/[^\d.]/g, "");
+  return parseFloat(digits) || 0;
 }
 
 function calcTotal(amount, frequency) {
