@@ -159,9 +159,21 @@ export default function App() {
         <div style={styles.tickerDivider} />
         <Stat icon="🏛️" label="Departments"     value={totalDepts} />
       </section>
+        {/* ── CTA ── */}
+        <section style={styles.cta}>
+          <p style={styles.ctaText}>Ready to make your mark?</p>
+          <a
+            href="https://forms.gle/EzPV9QR5soqMAAMJ8"
+            target="_blank"
+            rel="noreferrer"
+            style={styles.ctaBtn}
+          >
+            Join the Mission →
+          </a>
+        </section>
 
       <main style={styles.main}>
-
+        
         {/* ── Milestones ── */}
         <section style={styles.section}>
           <SectionLabel>Milestones</SectionLabel>
