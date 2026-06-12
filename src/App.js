@@ -140,6 +140,7 @@ export default function App() {
       {/* ── Header ── */}
       <header style={styles.header}>
         <div style={styles.headerInner}>
+          <h1 style={styles.subtitle}>1997-2001</h1>
           <h1 style={styles.title}>SREC Alumni Association Charitable Trust</h1>
           <p style={styles.subtitle}>Every rupee plants a future. Every donor shapes a legacy.</p>
           {usingDemo && (
@@ -194,31 +195,6 @@ export default function App() {
             ))}
           </div>
         </section>
-
-        {/* ── Donor Leaderboard ── */}
-        <section style={styles.section}>
-          <SectionLabel>Donor Leaderboard</SectionLabel>
-          <p style={styles.sectionNote}>All donors are anonymous — ranked by total pledge value.</p>
-          <div style={styles.table}>
-            <div style={{ ...styles.tableRow, ...styles.tableHeader }}>
-              <span>Rank</span>
-              <span>Total Pledge</span>
-              <span>Frequency</span>
-            </div>
-            {donorRanks.map((d, i) => (
-              <div key={i} style={{
-                ...styles.tableRow,
-                ...(i % 2 === 0 ? styles.tableRowEven : {}),
-                ...(d.rank <= 3 ? styles.tableRowTop : {}),
-              }}>
-                <span style={styles.rankCell}>{rankMedal(d.rank)}</span>
-                <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
-                <span style={styles.freqCell}>{d.frequency}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-
         {/* ── Department Leaderboard ── */}
         <section style={styles.section}>
           <SectionLabel>Department Leaderboard</SectionLabel>
@@ -240,6 +216,30 @@ export default function App() {
                 <span style={styles.deptCell}>{d.dept}</span>
                 <span style={styles.amountCell}>{formatINR(d.total)}</span>
                 <span style={styles.countCell}>{d.count} donor{d.count > 1 ? "s" : ""}</span>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* ── Donor Leaderboard ── */}
+        <section style={styles.section}>
+          <SectionLabel>Donor Leaderboard</SectionLabel>
+          <p style={styles.sectionNote}>All donors are anonymous — ranked by total pledge value.</p>
+          <div style={styles.table}>
+            <div style={{ ...styles.tableRow, ...styles.tableHeader }}>
+              <span>Rank</span>
+              <span>Total Pledge</span>
+              <span>Frequency</span>
+            </div>
+            {donorRanks.map((d, i) => (
+              <div key={i} style={{
+                ...styles.tableRow,
+                ...(i % 2 === 0 ? styles.tableRowEven : {}),
+                ...(d.rank <= 3 ? styles.tableRowTop : {}),
+              }}>
+                <span style={styles.rankCell}>{rankMedal(d.rank)}</span>
+                <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
+                <span style={styles.freqCell}>{d.frequency}</span>
               </div>
             ))}
           </div>
