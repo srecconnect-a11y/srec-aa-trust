@@ -226,20 +226,23 @@ export default function App() {
           <SectionLabel>Donor Leaderboard</SectionLabel>
           <p style={styles.sectionNote}>All donors are anonymous — ranked by total pledge value.</p>
           <div style={styles.table}>
-            <div style={{ ...styles.tableRow, ...styles.tableHeader }}>
+            <div style={{ ...styles.tableRow, ...styles.donorTableRow, ...styles.tableHeader }}>
               <span>Rank</span>
-              <span>Total Pledge</span>
+              <span>Amount</span>
               <span>Frequency</span>
+              <span>Total Pledge</span>
             </div>
             {donorRanks.map((d, i) => (
               <div key={i} style={{
                 ...styles.tableRow,
+                ...styles.donorTableRow,
                 ...(i % 2 === 0 ? styles.tableRowEven : {}),
                 ...(d.rank <= 3 ? styles.tableRowTop : {}),
               }}>
                 <span style={styles.rankCell}>{rankMedal(d.rank)}</span>
-                <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
+                <span style={styles.amountCell}>{formatINR(d.amount)}</span>
                 <span style={styles.freqCell}>{d.frequency}</span>
+                <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
               </div>
             ))}
           </div>
@@ -392,6 +395,9 @@ const styles = {
     padding: "14px 20px",
     borderBottom: `1px solid ${BORDER}`,
     fontSize: 14, gap: 8,
+  },
+  donorTableRow: {
+    gridTemplateColumns: "60px 1fr 1.2fr 1fr",
   },
   tableRowEven: { background: "rgba(255,255,255,0.02)" },
   tableRowTop: { background: "rgba(201,150,43,0.06)" },
