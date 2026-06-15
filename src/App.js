@@ -105,10 +105,19 @@ export default function App() {
   const totalDonors   = donors.length;
   const totalDepts    = new Set(donors.map(d => d.department)).size;
 
-  // Donor leaderboard
-  const donorRanks = [...donors]
-    .sort((a, b) => b.totalPledge - a.totalPledge)
-    .map((d, i) => ({ ...d, rank: i + 1 }));
+  // Donor list — number of donations grouped by total-pledge range
+  const PLEDGE_RANGES = [
+    { min: 1000,   max: 10000 },
+    { min: 10000,  max: 50000 },
+    { min: 50000,  max: 100000 },
+    { min: 100000, max: Infinity },
+  ];
+  const pledgeBuckets = PLEDGE_RANGES.map(r => ({
+    label: r.max === Infinity
+      ? `Above ${formatINR(r.min)}`
+      : `${formatINR(r.min)} – ${formatINR(r.max)}`,
+    count: donors.filter(d => d.totalPledge >= r.min && d.totalPledge < r.max).length,
+  }));
 
   // Department leaderboard
   const deptMap = {};
@@ -125,8 +134,6 @@ export default function App() {
   // Milestones
   const unlockedMilestones = MILESTONES.filter(m => totalPledged >= m.amount);
   const lockedMilestones   = MILESTONES.filter(m => totalPledged < m.amount);
-
-  const rankMedal = (r) => r === 1 ? "🥇" : r === 2 ? "🥈" : r === 3 ? "🥉" : `#${r}`;
 
   if (loading) return (
     <div style={styles.loader}>
@@ -200,8 +207,7 @@ export default function App() {
           <SectionLabel>Department List</SectionLabel>
           <p style={styles.sectionNote}>Which department leads the mission?</p>
           <div style={styles.table}>
-            <div style={{ ...styles.tableRow, ...styles.tableHeader }}>
-              <span>Rank</span>
+            <div style={{ ...styles.tableRow, ...styles.deptTableRow, ...styles.tableHeader }}>
               <span>Department</span>
               <span>Total Pledged</span>
               <span>Donors</span>
@@ -209,10 +215,10 @@ export default function App() {
             {deptRanks.map((d, i) => (
               <div key={d.dept} style={{
                 ...styles.tableRow,
+                ...styles.deptTableRow,
                 ...(i % 2 === 0 ? styles.tableRowEven : {}),
                 ...(d.rank <= 3 ? styles.tableRowTop : {}),
               }}>
-                <span style={styles.rankCell}>{rankMedal(d.rank)}</span>
                 <span style={styles.deptCell}>{d.dept}</span>
                 <span style={styles.amountCell}>{formatINR(d.total)}</span>
                 <span style={styles.countCell}>{d.count} donor{d.count > 1 ? "s" : ""}</span>
@@ -224,19 +230,20 @@ export default function App() {
         {/* ── Donor List ── */}
         <section style={styles.section}>
           <SectionLabel>Donor List</SectionLabel>
-          <p style={styles.sectionNote}>All donors are anonymous — sorted by total pledge value.</p>
+          <p style={styles.sectionNote}>All donors are anonymous — number of donations grouped by total pledge value.</p>
           <div style={styles.table}>
             <div style={{ ...styles.tableRow, ...styles.donorTableRow, ...styles.tableHeader }}>
-              <span>Total Pledge</span>
+              <span>Total Pledge Range</span>
+              <span>Donations</span>
             </div>
-            {donorRanks.map((d, i) => (
-              <div key={i} style={{
+            {pledgeBuckets.map((b, i) => (
+              <div key={b.label} style={{
                 ...styles.tableRow,
                 ...styles.donorTableRow,
                 ...(i % 2 === 0 ? styles.tableRowEven : {}),
-                ...(d.rank <= 3 ? styles.tableRowTop : {}),
               }}>
-                <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
+                <span style={styles.rangeCell}>{b.label}</span>
+                <span style={styles.countCell}>{b.count} donation{b.count !== 1 ? "s" : ""}</span>
               </div>
             ))}
           </div>
@@ -391,7 +398,10 @@ const styles = {
     fontSize: 14, gap: 8,
   },
   donorTableRow: {
-    gridTemplateColumns: "1fr",
+    gridTemplateColumns: "1.5fr 1fr",
+  },
+  deptTableRow: {
+    gridTemplateColumns: "1fr 1fr 1fr",
   },
   tableRowEven: { background: "rgba(255,255,255,0.02)" },
   tableRowTop: { background: "rgba(201,150,43,0.06)" },
@@ -399,6 +409,7 @@ const styles = {
   amountCell: { fontWeight: 700, color: GREEN },
   freqCell: { color: MUTED, fontSize: 12 },
   deptCell: { fontWeight: 700, color: TEXT },
+  rangeCell: { fontWeight: 700, color: TEXT },
   countCell: { color: MUTED, fontSize: 12 },
   cta: {
     textAlign: "center", padding: "48px 24px",
