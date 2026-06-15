@@ -195,9 +195,9 @@ export default function App() {
             ))}
           </div>
         </section>
-        {/* ── Department Leaderboard ── */}
+        {/* ── Department List ── */}
         <section style={styles.section}>
-          <SectionLabel>Department Leaderboard</SectionLabel>
+          <SectionLabel>Department List</SectionLabel>
           <p style={styles.sectionNote}>Which department leads the mission?</p>
           <div style={styles.table}>
             <div style={{ ...styles.tableRow, ...styles.tableHeader }}>
@@ -221,15 +221,12 @@ export default function App() {
           </div>
         </section>
 
-        {/* ── Donor Leaderboard ── */}
+        {/* ── Donor List ── */}
         <section style={styles.section}>
-          <SectionLabel>Donor Leaderboard</SectionLabel>
-          <p style={styles.sectionNote}>All donors are anonymous — ranked by total pledge value.</p>
+          <SectionLabel>Donor List</SectionLabel>
+          <p style={styles.sectionNote}>All donors are anonymous — sorted by total pledge value.</p>
           <div style={styles.table}>
             <div style={{ ...styles.tableRow, ...styles.donorTableRow, ...styles.tableHeader }}>
-              <span>Rank</span>
-              <span>Amount</span>
-              <span>Frequency</span>
               <span>Total Pledge</span>
             </div>
             {donorRanks.map((d, i) => (
@@ -239,9 +236,6 @@ export default function App() {
                 ...(i % 2 === 0 ? styles.tableRowEven : {}),
                 ...(d.rank <= 3 ? styles.tableRowTop : {}),
               }}>
-                <span style={styles.rankCell}>{rankMedal(d.rank)}</span>
-                <span style={styles.amountCell}>{formatINR(d.amount)}</span>
-                <span style={styles.freqCell}>{d.frequency}</span>
                 <span style={styles.amountCell}>{formatINR(d.totalPledge)}</span>
               </div>
             ))}
@@ -397,7 +391,7 @@ const styles = {
     fontSize: 14, gap: 8,
   },
   donorTableRow: {
-    gridTemplateColumns: "60px 1fr 1.2fr 1fr",
+    gridTemplateColumns: "1fr",
   },
   tableRowEven: { background: "rgba(255,255,255,0.02)" },
   tableRowTop: { background: "rgba(201,150,43,0.06)" },
