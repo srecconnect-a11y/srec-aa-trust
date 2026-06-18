@@ -1,13 +1,30 @@
 import { useState, useEffect } from "react";
 
-// ── Frequency multiplier map ──────────────────────────────────────────────────
-const FREQUENCY_MAP = {
-  "one time": 1,
-  "monthly for 1 year": 12,
-  "quarterly for 1 year": 4,
-  "half yearly for 1 year": 2,
-  "annually for 2 years": 2,
+// ── Installments per year for each period word ────────────────────────────────
+const PERIOD_RATES = {
+  "weekly":      52,
+  "monthly":     12,
+  "quarterly":    4,
+  "half yearly":  2,
+  "annually":     1,
 };
+
+function parseFrequency(str) {
+  const s = String(str).toLowerCase().trim();
+  if (s === "one time") return 1;
+
+  // Matches "[period] for [N] year(s)"
+  const match = s.match(/^(.+?)\s+for\s+(\d+)\s+years?$/);
+  if (match) {
+    const period = match[1].trim();
+    const years  = parseInt(match[2], 10);
+    const rate   = PERIOD_RATES[period];
+    if (rate) return rate * years;
+  }
+
+  console.warn(`Unrecognized frequency: "${str}" — defaulting to 1`);
+  return 1;
+}
 
 function parseAmount(raw) {
   if (!raw) return 0;
@@ -16,9 +33,7 @@ function parseAmount(raw) {
 }
 
 function calcTotal(amount, frequency) {
-  const key = String(frequency).toLowerCase().trim();
-  const multiplier = FREQUENCY_MAP[key] ?? 1;
-  return amount * multiplier;
+  return amount * parseFrequency(frequency);
 }
 
 function formatINR(n) {
